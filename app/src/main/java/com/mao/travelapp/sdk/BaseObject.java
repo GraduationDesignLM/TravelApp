@@ -1,8 +1,19 @@
 package com.mao.travelapp.sdk;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -21,43 +32,68 @@ public abstract class BaseObject {
 
     private final static String URL = HttpManager.BASE_URL + HttpManager.DB_SERVLET_URL;
 
+
+    /**
+     * 添加一条记录
+     */
     final public void save() {
-
-        String json = generateJson();
-        System.out.println("json:" + json);
-        RequestBody body = new FormBody.Builder()
-                .add("json", json)
-                .build();
-
-        Request request = new Request.Builder()
-                .url(URL)
-                .post(body)
-                .build();
-
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("onFailure" + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String body = response.body().string();
-                System.out.println("body" + body);
-            }
-        });
+        save(null);
     }
 
+    /**
+     * 添加一条记录
+     *
+     * @param callback 回调接口
+     */
+    final public void save(final CommonCallback callback) {
+        String json = generateAddOrUpdateJson(1);
+        addOrUpdateOrDelete(json, callback);
+    }
 
-    private String generateJson() {
+    /**
+     * 更新指定id的数据
+     */
+    final public void update() {
+        update(null);
+    }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"op\":\"1\",\"table\":\"");
-        sb.append(getClass().getSimpleName());
-        sb.append("\"");
+    /**
+     * 更新指定id的数据
+     *
+     * @param callback 回调接口
+     */
+    final public void update(final CommonCallback callback) {
+        String json = generateAddOrUpdateJson(3);
+        addOrUpdateOrDelete(json, callback);
+    }
 
+    /**
+     * 删除一条记录
+     *
+     * @param where 条件
+     */
+    final public void delete(Map<String, String> where) {
+        delete(where, null);
+    }
+
+    /**
+     * 删除一条记录
+     *
+     * @param where 条件
+     * @param callback 回调接口
+     */
+    final public void delete(Map<String, String> where, final CommonCallback callback) {
+        String json = generateDeleteOrQueryJson(2, where);
+        addOrUpdateOrDelete(json, callback);
+    }
+
+    final public <T> void query(Map<String, String> where, Class<T> clazz, QueryCallback<T> callback) {
+        String json = generateDeleteOrQueryJson(4, where);
+        query(json, clazz, callback);
+    }
+
+    private String generateAddOrUpdateJson(int op) {
+        StringBuilder sb = generateCommonsonHeader(op);
         try {
             Class<?> clazz = getClass();
             Field[] fields = clazz.getDeclaredFields();
@@ -72,7 +108,6 @@ public abstract class BaseObject {
                 }
                 sb.append("\"");
                 sb.append(fields[i].getName());
-                System.out.println("1111" + fields[i].getName());
                 sb.append("\":\"");
                 fields[i].setAccessible(true);
                 sb.append(fields[i].get(this).toString());
@@ -85,4 +120,114 @@ public abstract class BaseObject {
             return "{}";
         }
     }
+
+    private String generateDeleteOrQueryJson(int op, Map<String, String> where) {
+        StringBuilder sb = generateCommonsonHeader(op);
+        Set<Map.Entry<String, String>> entrys = where.entrySet();
+        int i = 0;
+        int size = entrys.size();
+        for(Map.Entry<String, String> e : entrys) {
+            if(i < size) {
+                sb.append(",");
+            }
+            sb.append("\"");
+            sb.append(e.getKey());
+            sb.append("\":\"");
+            sb.append(e.getValue());
+            sb.append("\"");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * 生成请求json通用头部
+     * 最后生成的字符串如下：
+     * {
+     *     "op":"",
+     *     "table":""
+     *
+     *
+     * @param op
+     * @return
+     */
+    private StringBuilder generateCommonsonHeader(int op) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"op\":" + op + ",\"table\":\"");
+        sb.append(getClass().getSimpleName());
+        sb.append("\"");
+        return sb;
+    }
+
+    private void addOrUpdateOrDelete(String json, final CommonCallback callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("json", json)
+                .build();
+
+        System.out.println("update json:" + json);
+
+        Request request = new Request.Builder()
+                .url(URL)
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if(callback != null) {
+                    callback.onFail(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if(callback != null) {
+                    callback.onSuccess(Integer.valueOf(response.body().string()));
+                }
+            }
+        });
+    }
+
+    private <T> void query(String json, final Class<T> clazz, final QueryCallback<T> callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("json", json)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(URL)
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if(callback != null) {
+                    callback.onFail(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if(callback != null) {
+                    String json = response.body().string();
+
+                    List<T> list = new ArrayList<T>();
+                    JsonParser parser = new JsonParser();
+                    JsonArray arr = parser.parse(json).getAsJsonArray();
+
+                    Gson gson = new Gson();
+                    for(JsonElement e : arr) {
+                        list.add(gson.fromJson(e, clazz));
+                    }
+                    callback.onSuccess(list);
+
+                }
+            }
+        });
+    }
+
 }
