@@ -70,23 +70,31 @@ public abstract class BaseObject {
     /**
      * 删除一条记录
      *
-     * @param where 条件
+     * @param where 条件， 至少必须包含一个条件
      */
-    final public void delete(Map<String, String> where) {
-        delete(where, null);
+    final public static void delete(Map<String, String> where, Class<?> clazz) {
+        delete(where, clazz, null);
     }
 
     /**
      * 删除一条记录
      *
-     * @param where 条件
+     * @param where 条件， 至少必须包含一个条件
      * @param callback 回调接口
      */
-    final public void delete(Map<String, String> where, final CommonCallback callback) {
-        String json = generateDeleteOrQueryJson(2, where, getClass());
+    final public static void delete(Map<String, String> where, Class<?> clazz, final CommonCallback callback) {
+        String json = generateDeleteOrQueryJson(2, where, clazz);
         addOrUpdateOrDelete(json, callback);
     }
 
+    /**
+     * 查询
+     *
+     * @param where 条件，size为0表示查询所有记录
+     * @param clazz 要查询的表对应的实体类的Class对象
+     * @param callback 回调
+     * @param <T> 要查询的表对应的实体类类型
+     */
     final public static <T> void query(Map<String, String> where, Class<T> clazz, QueryCallback<T> callback) {
         String json = generateDeleteOrQueryJson(4, where, clazz);
         query(json, clazz, callback);
@@ -162,7 +170,7 @@ public abstract class BaseObject {
         return sb;
     }
 
-    private void addOrUpdateOrDelete(String json, final CommonCallback callback) {
+    private static void addOrUpdateOrDelete(String json, final CommonCallback callback) {
         RequestBody body = new FormBody.Builder()
                 .add("json", json)
                 .build();

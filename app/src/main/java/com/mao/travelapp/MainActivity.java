@@ -21,7 +21,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //添加测试
+//        User user = new User();
+//        user.setUsername("gou");
+//        user.setPassword("123456");
+//        user.save(new CommonCallback() {
+//            @Override
+//            public void onSuccess(int affectedRowCount) {
+//                System.out.println("affectedRowCount:" + affectedRowCount);
+//            }
+//
+//            @Override
+//            public void onFail(String error) {
+//                System.out.println("error:" + error);
+//            }
+//        });
+
+        //更新测试
+
+        //删除测试
         Map<String, String> where = new HashMap<String, String>();
+        //where.put("id", "1");
+        BaseObject.delete(where, User.class, new CommonCallback() {
+            @Override
+            public void onSuccess(int affectedRowCount) {
+                System.out.println("affectedRowCount:" + affectedRowCount);
+            }
+
+            @Override
+            public void onFail(String error) {
+                System.out.println("error:" + error);
+            }
+        });
+
+        //查询测试
+        /*Map<String, String> where = new HashMap<String, String>();
         BaseObject.query(where, User.class, new QueryCallback<User>(){
 
             @Override
@@ -35,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFail(String error) {
                 System.out.println(error);
             }
-        });
+        });*/
 
 
 
