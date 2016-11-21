@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.mao.travelapp.bean.User;
+import com.mao.travelapp.sdk.CommonCallback;
 import com.mao.travelapp.sdk.QueryCallback;
 
 import java.lang.reflect.Field;
@@ -21,16 +22,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         User user = new User();
+
         Map<String, String> where = new HashMap<String, String>();
-        where.put("id", "3");
-        user.query(where, User.class, new QueryCallback<User>() {
+        user.query(where, User.class, new QueryCallback<User>(){
+
 
             @Override
             public void onSuccess(List<User> list) {
-                System.out.println(list.size());
-                System.out.println(list.get(0).getClass());
                 for(User u : list) {
-                    System.out.println("id:" + u.getId() + ",username:" + u.getUsername() + ",password:" + u.getPassword());
+                    System.out.println(u.getUsername() + " " + u.getPassword());
                 }
             }
 

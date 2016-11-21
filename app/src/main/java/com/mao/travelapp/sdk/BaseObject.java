@@ -98,12 +98,15 @@ public abstract class BaseObject {
             Class<?> clazz = getClass();
             Field[] fields = clazz.getDeclaredFields();
             int length = fields.length;
+            if(length > 0) {
+                sb.append(",");
+            }
             for(int i = 0; i < length; i++) {
                 //可能为编译自动生成的Field，忽略
                 if(fields[i].isSynthetic()) {
                     continue;
                 }
-                if(i < length - 1) {
+                if(i > 0) {
                     sb.append(",");
                 }
                 sb.append("\"");
@@ -164,8 +167,6 @@ public abstract class BaseObject {
                 .add("json", json)
                 .build();
 
-        System.out.println("update json:" + json);
-
         Request request = new Request.Builder()
                 .url(URL)
                 .post(body)
@@ -191,6 +192,9 @@ public abstract class BaseObject {
     }
 
     private <T> void query(String json, final Class<T> clazz, final QueryCallback<T> callback) {
+
+        System.out.println("json:" + json);
+
         RequestBody body = new FormBody.Builder()
                 .add("json", json)
                 .build();
