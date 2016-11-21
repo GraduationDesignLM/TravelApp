@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.mao.travelapp.bean.User;
+import com.mao.travelapp.sdk.BaseObject;
 import com.mao.travelapp.sdk.CommonCallback;
 import com.mao.travelapp.sdk.QueryCallback;
 
@@ -20,12 +21,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        User user = new User();
-
         Map<String, String> where = new HashMap<String, String>();
-        user.query(where, User.class, new QueryCallback<User>(){
-
+        BaseObject.query(where, User.class, new QueryCallback<User>(){
 
             @Override
             public void onSuccess(List<User> list) {

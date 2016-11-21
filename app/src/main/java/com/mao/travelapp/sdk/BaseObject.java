@@ -83,17 +83,17 @@ public abstract class BaseObject {
      * @param callback 回调接口
      */
     final public void delete(Map<String, String> where, final CommonCallback callback) {
-        String json = generateDeleteOrQueryJson(2, where);
+        String json = generateDeleteOrQueryJson(2, where, getClass());
         addOrUpdateOrDelete(json, callback);
     }
 
-    final public <T> void query(Map<String, String> where, Class<T> clazz, QueryCallback<T> callback) {
-        String json = generateDeleteOrQueryJson(4, where);
+    final public static <T> void query(Map<String, String> where, Class<T> clazz, QueryCallback<T> callback) {
+        String json = generateDeleteOrQueryJson(4, where, clazz);
         query(json, clazz, callback);
     }
 
     private String generateAddOrUpdateJson(int op) {
-        StringBuilder sb = generateCommonsonHeader(op);
+        StringBuilder sb = generateCommonsonHeader(op, getClass());
         try {
             Class<?> clazz = getClass();
             Field[] fields = clazz.getDeclaredFields();
@@ -124,8 +124,8 @@ public abstract class BaseObject {
         }
     }
 
-    private String generateDeleteOrQueryJson(int op, Map<String, String> where) {
-        StringBuilder sb = generateCommonsonHeader(op);
+    private static String generateDeleteOrQueryJson(int op, Map<String, String> where, Class<?> clazz) {
+        StringBuilder sb = generateCommonsonHeader(op, clazz);
         Set<Map.Entry<String, String>> entrys = where.entrySet();
         int i = 0;
         int size = entrys.size();
@@ -154,10 +154,10 @@ public abstract class BaseObject {
      * @param op
      * @return
      */
-    private StringBuilder generateCommonsonHeader(int op) {
+    private static StringBuilder generateCommonsonHeader(int op, Class<?> clazz) {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"op\":" + op + ",\"table\":\"");
-        sb.append(getClass().getSimpleName());
+        sb.append(clazz.getSimpleName());
         sb.append("\"");
         return sb;
     }
@@ -191,7 +191,7 @@ public abstract class BaseObject {
         });
     }
 
-    private <T> void query(String json, final Class<T> clazz, final QueryCallback<T> callback) {
+    private static <T> void query(String json, final Class<T> clazz, final QueryCallback<T> callback) {
 
         System.out.println("json:" + json);
 
