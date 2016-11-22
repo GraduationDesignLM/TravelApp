@@ -4,12 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +15,6 @@ import java.util.Set;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -45,7 +41,7 @@ public abstract class BaseObject {
      *
      * @param callback 回调接口
      */
-    final public void save(final CommonCallback callback) {
+    final public void save(final CommonDBCallback callback) {
         String json = generateAddOrUpdateJson(1);
         addOrUpdateOrDelete(json, callback);
     }
@@ -62,7 +58,7 @@ public abstract class BaseObject {
      *
      * @param callback 回调接口
      */
-    final public void update(final CommonCallback callback) {
+    final public void update(final CommonDBCallback callback) {
         String json = generateAddOrUpdateJson(3);
         addOrUpdateOrDelete(json, callback);
     }
@@ -82,7 +78,7 @@ public abstract class BaseObject {
      * @param where 条件， 至少必须包含一个条件
      * @param callback 回调接口
      */
-    final public static void delete(Map<String, String> where, Class<?> clazz, final CommonCallback callback) {
+    final public static void delete(Map<String, String> where, Class<?> clazz, final CommonDBCallback callback) {
         String json = generateDeleteOrQueryJson(2, where, clazz);
         addOrUpdateOrDelete(json, callback);
     }
@@ -170,7 +166,7 @@ public abstract class BaseObject {
         return sb;
     }
 
-    private static void addOrUpdateOrDelete(String json, final CommonCallback callback) {
+    private static void addOrUpdateOrDelete(String json, final CommonDBCallback callback) {
         RequestBody body = new FormBody.Builder()
                 .add("json", json)
                 .build();

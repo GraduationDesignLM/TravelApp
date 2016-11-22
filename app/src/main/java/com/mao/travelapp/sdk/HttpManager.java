@@ -10,4 +10,7 @@ class HttpManager {
     //final static String BASE_URL = "http://192.168.191.1:" + port + "/";
     final static String DB_SERVLET_URL = "TravelServer/servlet/CommonDBServlet";
 
+    /** 上传一个文件URL后缀 */
+    final static String UPLOADFILE_SERVLET_URL = "TravelServer/servlet/UploadFileServlet";
+
 }
