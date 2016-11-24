@@ -2,11 +2,14 @@ package com.mao.travelapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.mao.travelapp.sdk.UploadFileCallback;
 import com.mao.travelapp.sdk.FileHelper;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ImageView iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });*/
 
-
-
+        iv = (ImageView) findViewById(R.id.iv);
 
         //文件测试
         String path = "/sdcard/123.jpg";
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String url) {
                 System.out.println("url:" + url);
+
             }
 
             @Override
@@ -80,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("error:" + error);
             }
         });
+
+
+
 
     }
 
