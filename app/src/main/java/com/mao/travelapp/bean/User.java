@@ -1,5 +1,6 @@
 package com.mao.travelapp.bean;
 
+import com.j256.ormlite.field.DatabaseField;
 import com.mao.travelapp.sdk.BaseObject;
 
 /**
@@ -7,8 +8,13 @@ import com.mao.travelapp.sdk.BaseObject;
  */
 public class User extends BaseObject {
 
+    @DatabaseField(generatedId = true)
     private int id;
+
+    @DatabaseField
     private String username;
+
+    @DatabaseField
     private String password;
 
     public int getId() {
