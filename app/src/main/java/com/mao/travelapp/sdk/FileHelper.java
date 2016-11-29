@@ -1,5 +1,8 @@
 package com.mao.travelapp.sdk;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -21,6 +24,31 @@ import okhttp3.Response;
 public class FileHelper {
 
     private final static String URL = HttpManager.BASE_URL + HttpManager.UPLOADFILE_SERVLET_URL;
+
+    private final static Handler sHandler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            switch (msg.what) {
+                //上传一个文件回调消息处理
+                case 0:
+                    UploadFileCallback callback = (UploadFileCallback) bundle.get("callback");
+                    String text = (String) bundle.get("text");
+                    int arg = msg.arg1;
+                    if(arg == 0) {
+                        callback.onSuccess(text);
+                    } else if(arg == 1) {
+                        callback.onFail(text);
+                    }
+                    break;
+
+                default:
+            }
+
+        }
+    };
+
 
     /**
      * 上传一个文件
@@ -55,7 +83,14 @@ public class FileHelper {
             @Override
             public void onFailure(Call call, IOException e) {
                 if(callback != null) {
-                    callback.onFail(e.getMessage());
+                    Message msg = Message.obtain();
+                    msg.what = 0;
+                    msg.arg1 = 1;//失败
+                    Bundle data = new Bundle();
+                    data.putSerializable("callback", callback);
+                    data.putString("text", e.getMessage());
+                    msg.setData(data);
+                    sHandler.sendMessage(msg);
                 }
             }
 
@@ -63,13 +98,22 @@ public class FileHelper {
             public void onResponse(Call call, Response response) throws IOException {
                 if(callback != null) {
                     String result = response.body().string();
-                    System.out.println(result);
+                    Message msg = Message.obtain();
+                    msg.what = 0;
+                    String text;
                     //不是0表示上传成功，得到文件路径
                     if(!TextUtils.isEmpty(result) && !"0".equals(result.trim())) {
-                        callback.onSuccess(result.trim());
+                        text = result.trim();
+                        msg.arg1 = 0;//成功
                     } else {
-                        callback.onFail("上传失败");
+                        text = "上传失败";
+                        msg.arg1 = 1;//失败
                     }
+                    Bundle data = new Bundle();
+                    data.putSerializable("callback", callback);
+                    data.putString("text", text);
+                    msg.setData(data);
+                    sHandler.sendMessage(msg);
                 }
             }
         });

@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.mao.imageloader.utils.L;
 import com.mao.imageloader.utils.RandomUtils;
 
+import android.content.SyncStatusObserver;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -46,8 +47,15 @@ class ImageLoaderExecutor {
 
 	
 	private final static ImageLoaderConfiguration DEFAULT_CONFIGURATION = new ImageLoaderConfiguration.Builder().build();
-	private final static ImageLoaderOptions DEFAULT_OPTIONS = new ImageLoaderOptions.Builder().build();
-	
+	private final static ImageLoaderOptions DEFAULT_OPTIONS =
+			new ImageLoaderOptions.Builder()
+					.cacheInMemory(true)
+					.cacheInDisk(true)
+					.loadFromMemory(false)
+					.loadFromDisk(false)
+					.loadFromNetwork(true)
+					.setBitmapOptions(null)
+					.build();
 	
 	private OnImageLoaderExecutorListener mExecutorListener;
 	private Map<String, ImageLoadTask> mTaskMap;
@@ -75,7 +83,7 @@ class ImageLoaderExecutor {
 		
 		ImageLoaderOptions opts = task.getOptions();
 		if(opts == null) {
-			opts = DEFAULT_OPTIONS; 
+			task.setOptions(DEFAULT_OPTIONS);
 		}
 		
 		String taskID = RandomUtils.randomDigits();
