@@ -27,4 +27,6 @@ dependencies {
     compile 'com.squareup.okio:okio:1.10.0'
     compile files('libs/gson-2.8.0.jar')
     compile 'io.reactivex:rxjava:1.0.9'
+    compile files('libs/ormlite-android-4.48.jar')
+    compile files('libs/ormlite-core-4.48.jar')
 }
