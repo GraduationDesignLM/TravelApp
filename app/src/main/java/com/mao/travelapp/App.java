@@ -18,7 +18,7 @@ public class App extends Application {
         ImageLoader imageLoader = ImageLoader.getInstance();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder()
                 .setDiskCacheMaxSize(2 * 1024 * 1024 * 1024L)
-                .setDiskCachePath("/sdcard/KImageLoader")
+                .setDiskCachePath("/sdcard/TravelApp/pic/")
                 .isAutoCreateCacheDir(true)
                 .build();
         imageLoader.setImageLoaderConfiguration(config);

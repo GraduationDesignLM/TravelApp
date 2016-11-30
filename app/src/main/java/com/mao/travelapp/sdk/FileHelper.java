@@ -5,8 +5,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.mao.imageloader.utils.L;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,6 +29,8 @@ import okhttp3.Response;
  */
 public class FileHelper {
 
+    private final static String TAG = "FileHelper";
+
     private final static String URL = HttpManager.BASE_URL + HttpManager.UPLOADFILE_SERVLET_URL;
 
     private final static Handler sHandler = new Handler(){
@@ -37,7 +45,9 @@ public class FileHelper {
                     String text = (String) bundle.get("text");
                     int arg = msg.arg1;
                     if(arg == 0) {
-                        callback.onSuccess(text);
+                        String[] array = text.split("#");
+                        List<String> urls = Arrays.asList(array);
+                        callback.onSuccess(urls);
                     } else if(arg == 1) {
                         callback.onFail(text);
                     }
@@ -53,23 +63,29 @@ public class FileHelper {
     /**
      * 上传一个文件
      *
-     * @param path 文件所在路径
+     * @param paths 文件所在路径集合
      * @param callback 回调接口
      */
-    public final static void uploadOne(String path, final UploadFileCallback callback) {
+    public final static void upload(List<String> paths, final UploadFileCallback callback) {
 
-        if(TextUtils.isEmpty(path)) {
-
+        if(paths == null || paths.size() <= 0) {
+            L.w(TAG, "paths is null or size <= 0");
+            return;
         }
-        File file = new File(path);
-
-        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
-        RequestBody body = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(Headers.of(
-                        "Content-Disposition",
-                        "form-data; name=\"mFile\"; filename=\"" + "123" + "\""), fileBody)
-                .build();
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+        for(int i = 0; i < paths.size(); i++) {
+            String path = paths.get(i);
+            if(TextUtils.isEmpty(path)) {
+                continue;
+            }
+            File file = new File(path);
+            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+            builder.addPart(Headers.of(
+                    "Content-Disposition",
+                    "form-data; name=\"mFile\"; filename=\"" + "123" + "\"" + i), fileBody);
+        }
+        RequestBody body = builder.build();
 
         Request request = new Request.Builder()
                 .url(URL)
