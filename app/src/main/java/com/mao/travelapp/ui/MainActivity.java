@@ -18,7 +18,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         iv = (ImageView) findViewById(R.id.iv);
 
@@ -42,6 +41,26 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void setToolbaroOpposition() {
+
+    }
+
+    @Override
+    protected int getToolbarMenuLayout() {
+        return 0;
+    }
+
+    @Override
+    protected void setBaseToolbarMenuItemClickListener() {
 
     }
 
