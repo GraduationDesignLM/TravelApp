@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.mao.travelapp.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -22,6 +23,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //百度地图初始化
+        SDKInitializer.initialize(getApplicationContext());
+        //百度地图初始化
 
         ActionBar actionBar = getActionBar();
         if(actionBar != null) {
@@ -37,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         //设置当前Window背景颜色为白色
         getWindow().setBackgroundDrawableResource(R.color.white);
+
     }
 
     public TextView setActionBarLeftText(int id) {
