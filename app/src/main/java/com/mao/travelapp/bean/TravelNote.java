@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 public class TravelNote extends BaseObject {
+    private int id;
     private String text;
     private List<String> pictureUrl;
     private String location;
@@ -16,6 +17,14 @@ public class TravelNote extends BaseObject {
     private String publish_time;
     private String locationLongitude;
     private String locationLatitude;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getPublish_time() {
         return publish_time;
