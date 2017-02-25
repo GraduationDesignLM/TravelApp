@@ -1,5 +1,11 @@
 package com.mao.travelapp.sdk;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -27,6 +33,47 @@ import okhttp3.Response;
 public abstract class BaseObject {
 
     private final static String URL = HttpManager.BASE_URL + HttpManager.DB_SERVLET_URL;
+
+    private static final int COMMONDBCALLBACK_SUCCESS_MSG = 1;
+    private static final int COMMONDBCALLBACK_FAIL_MSG = 2;
+    private static final int QUERYBCALLBACK_SUCCESS_MSG = 3;
+    private static final int QUERYCALLBACK_FAIL_MSG = 4;
+
+    private static Handler mHandler = new Handler(Looper.getMainLooper()){
+
+        @Override
+        public void handleMessage(Message msg) {
+            CommonDBCallback callback = null;
+            QueryCallback queryCallback = null;
+            String message = null;
+            switch (msg.what) {
+                case COMMONDBCALLBACK_SUCCESS_MSG:
+                    callback = (CommonDBCallback) msg.obj;
+                    String affectedRowCount = DataHoler.commonDBCallbackMap.get(callback);
+                    callback.onSuccess(Integer.valueOf(affectedRowCount));
+                    break;
+                case COMMONDBCALLBACK_FAIL_MSG:
+                    callback = (CommonDBCallback) msg.obj;
+                    message = DataHoler.commonDBCallbackMap.get(callback);
+                    callback.onFail(message);
+                    break;
+                case QUERYBCALLBACK_SUCCESS_MSG:
+                    queryCallback = (QueryCallback) msg.obj;
+                    List<?> list = DataHoler.queryCallbackMap.get(queryCallback);
+                    queryCallback.onSuccess(list);
+                    break;
+                case QUERYCALLBACK_FAIL_MSG:
+                    queryCallback = (QueryCallback) msg.obj;
+                    message = msg.getData().getString("message");
+                    queryCallback.onFail(message);
+                    break;
+                default:
+                    break;
+
+            }
+        }
+    };
+
 
 
     /**
@@ -96,6 +143,7 @@ public abstract class BaseObject {
         query(json, clazz, callback);
     }
 
+    @NonNull
     private String generateAddOrUpdateJson(int op) {
         StringBuilder sb = generateCommonsonHeader(op, getClass());
         try {
@@ -182,14 +230,24 @@ public abstract class BaseObject {
             @Override
             public void onFailure(Call call, IOException e) {
                 if(callback != null) {
-                    callback.onFail(e.getMessage());
+                    //callback.onFail(e.getMessage());
+                    Message msg = Message.obtain();
+                    msg.what = COMMONDBCALLBACK_FAIL_MSG;
+                    msg.obj = callback;
+                    DataHoler.commonDBCallbackMap.put(callback, e.getMessage());
+                    mHandler.sendMessage(msg);
                 }
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(callback != null) {
-                    callback.onSuccess(Integer.valueOf(response.body().string()));
+                    //callback.onSuccess(Integer.valueOf(response.body().string()));
+                    Message msg = Message.obtain();
+                    msg.what = COMMONDBCALLBACK_SUCCESS_MSG;
+                    msg.obj = callback;
+                    DataHoler.commonDBCallbackMap.put(callback, response.body().string());
+                    mHandler.sendMessage(msg);
                 }
             }
         });
@@ -214,7 +272,14 @@ public abstract class BaseObject {
             @Override
             public void onFailure(Call call, IOException e) {
                 if(callback != null) {
-                    callback.onFail(e.getMessage());
+                    //callback.onFail(e.getMessage());
+                    Message msg = Message.obtain();
+                    msg.what = QUERYCALLBACK_FAIL_MSG;
+                    msg.obj = callback;
+                    Bundle data = new Bundle();
+                    data.putString("message", e.getMessage());
+                    msg.setData(data);
+                    mHandler.sendMessage(msg);
                 }
             }
 
@@ -231,7 +296,12 @@ public abstract class BaseObject {
                     for(JsonElement e : arr) {
                         list.add(gson.fromJson(e, clazz));
                     }
-                    callback.onSuccess(list);
+                    //callback.onSuccess(list);
+                    Message msg = Message.obtain();
+                    msg.what = QUERYBCALLBACK_SUCCESS_MSG;
+                    msg.obj = callback;
+                    DataHoler.queryCallbackMap.put(callback, list);
+                    mHandler.sendMessage(msg);
 
                 }
             }

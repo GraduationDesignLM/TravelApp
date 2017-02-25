@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+	公共ActionBar布局
+
+	@author 麦灿标
+ -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_actionbar_backgroundColor"
+    android:padding="@dimen/app_common_actionbar_padding">
+    
+    <!-- 左边TextView -->
+	<TextView
+	    android:id="@+id/app_common_actionbar_left_tv" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerVertical="true"
+	    style="@style/app_common_actionbar_textStyle"/>
+	
+	<!-- 中间TextView -->
+	<TextView
+	    android:id="@+id/app_common_actionbar_center_tv" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true"
+	    android:textSize="@dimen/app_common_actionbar_textSize"
+	    style="@style/app_common_actionbar_textStyle"/>
+	
+	<!-- 右边TextView -->
+	<TextView
+	    android:id="@+id/app_common_actionbar_right_tv" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerVertical="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentEnd="true"
+	    android:textSize="@dimen/app_common_actionbar_textSize"
+	    style="@style/app_common_actionbar_textStyle"/>
+	
+</RelativeLayout>

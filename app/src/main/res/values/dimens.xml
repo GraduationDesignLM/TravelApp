@@ -2,6 +2,10 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_common_actionbar_textSize">20sp</dimen>
+    <dimen name="app_common_border_padding">10dip</dimen>
+    <dimen name="app_common_border_strokeWidth">1dip</dimen>
+    <dimen name="app_common_actionbar_padding">10dip</dimen>
     <!--mcb-->
     
     

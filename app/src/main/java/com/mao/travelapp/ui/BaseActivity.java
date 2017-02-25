@@ -1,67 +1,101 @@
 package com.mao.travelapp.ui;
 
+import android.app.ActionBar;
+import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mao.travelapp.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
-    private Toolbar toolbar;
+
+
+    private View mActionBarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
-        initToolbar();
-        setToolbaroOpposition();
-        setToolbarMenu();
+
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayOptions(0);
+            actionBar.setDisplayShowCustomEnabled(true);
+            mActionBarView = LayoutInflater.from(this).inflate(R.layout.app_common_actionbar, null);
+            ActionBar.LayoutParams params = new ActionBar.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            actionBar.setCustomView(mActionBarView, params);
+        }
+
+        if(getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        //设置当前Window背景颜色为白色
+        getWindow().setBackgroundDrawableResource(R.color.white);
     }
 
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.tb_base);
+    public TextView setActionBarLeftText(int id) {
+        Resources resources = getResources();
+        return setActionBarLeftText(resources.getString(id));
     }
 
-    protected void hideToolbar() {
-        if (toolbar != null) {
-            toolbar.setVisibility(View.GONE);
+    public TextView setActionBarLeftText(String text) {
+        if(mActionBarView != null) {
+            TextView tv = (TextView) mActionBarView.findViewById(R.id.app_common_actionbar_left_tv);
+            if(tv != null) {
+                tv.setText(text);
+                return tv;
+            }
+        }
+        return null;
+    }
+
+    public TextView setActionBarCenterText(int id) {
+        Resources resources = getResources();
+        return setActionBarCenterText(resources.getString(id));
+    }
+
+    public TextView setActionBarCenterText(String text) {
+        if(mActionBarView != null) {
+            TextView tv = (TextView) mActionBarView.findViewById(R.id.app_common_actionbar_center_tv);
+            if(tv != null) {
+                tv.setText(text);
+                return tv;
+            }
+        }
+        return null;
+    }
+
+    public TextView setActionBarRightText(int id) {
+        Resources resources = getResources();
+        return setActionBarRightText(resources.getString(id));
+    }
+
+    public TextView setActionBarRightText(String text) {
+        if(mActionBarView != null) {
+            TextView tv = (TextView) mActionBarView.findViewById(R.id.app_common_actionbar_right_tv);
+            if(tv != null) {
+                tv.setText(text);
+            }
+            return tv;
+        }
+        return null;
+    }
+
+    public void setActionBarBackgroundColor(int color) {
+        if(mActionBarView != null) {
+            mActionBarView.setBackgroundColor(color);
         }
     }
 
-    public Toolbar getBaseToolbar() {
-        if (toolbar != null) {
-            return toolbar;
-        } else
-            return (Toolbar) findViewById(R.id.tb_base);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
-    protected abstract int getLayoutId();
-
-    /**
-     * set toolbar's title、subtitle、logo、menu or navigations.If not set Toolbar just return void.
-     */
-    protected abstract void setToolbaroOpposition();
-
-    protected void setToolbarMenu() {
-        int MENU_ID = getToolbarMenuLayout();
-        if (MENU_ID != 0) {
-            toolbar.inflateMenu(MENU_ID);
-            setBaseToolbarMenuItemClickListener();
-        }
-    }
-
-    /**
-     * The LayoutId of menu which you want to set.If did not set,just return 0.
-     *
-     * @return menu_layout_id.
-     */
-    protected abstract int getToolbarMenuLayout();
-
-    protected abstract void setBaseToolbarMenuItemClickListener();
-
-    protected void setMenuIcon(Drawable drawable) {
-        toolbar.setOverflowIcon(drawable);
-    }
 }
