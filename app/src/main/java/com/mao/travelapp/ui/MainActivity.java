@@ -5,6 +5,8 @@ import android.widget.ImageView;
 
 import com.mao.imageloader.ImageLoader;
 import com.mao.travelapp.R;
+import com.mao.travelapp.bean.User;
+import com.mao.travelapp.sdk.CommonDBCallback;
 import com.mao.travelapp.sdk.FileHelper;
 import com.mao.travelapp.sdk.UploadFileCallback;
 
@@ -19,6 +21,12 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+
+
 
         iv = (ImageView) findViewById(R.id.iv);
 

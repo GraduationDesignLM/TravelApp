@@ -17,6 +17,9 @@ public class User extends BaseObject {
     @DatabaseField
     private String password;
 
+    @DatabaseField
+    private String picture;
+
     public int getId() {
         return id;
     }
@@ -39,5 +42,13 @@ public class User extends BaseObject {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }
