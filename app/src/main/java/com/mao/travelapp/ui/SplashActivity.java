@@ -30,6 +30,9 @@ import java.util.Map;
  */
 public class SplashActivity extends BaseActivity {
 
+    private static final int REGISTER_REQUEST_CODE = 1;
+    private static final int LOGIN_REQUEST_CODE = 2;
+
     private Button mLoginBtn;
     private Button mRegBtn;
     private View mOperationView;
@@ -106,6 +109,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //跳转到登录页面
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             }
         });
 
@@ -113,6 +117,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //跳转到注册页面
+                startActivity(new Intent(SplashActivity.this, RegisterActivity.class));
             }
         });
 
@@ -120,5 +125,14 @@ public class SplashActivity extends BaseActivity {
 
     private void handleForUnLoagin() {
         mOperationView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //检查有没有登录，有的话finish调当前Activity，然后跳转到MainActivity
+        if(UserManager.isLogin()) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 }

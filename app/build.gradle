@@ -13,7 +13,7 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.mao.travelapp"
-        minSdkVersion 17
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -46,4 +46,5 @@ dependencies {
     compile 'com.github.chihane:JDAddressSelector:1.1.4'
     compile 'com.badoo.mobile:android-weak-handler:1.1'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile files('libs/BmobSDK_V3.4.4_0930.jar')
 }
