@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	注册界面
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/app_common_widget_bg"
+        android:layout_marginTop="10dip">
+
+        <!-- 用户名 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dip"
+            android:padding="5dip"
+            android:paddingBottom="5dip">
+            <EditText
+                android:id="@+id/app_register_username_et"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1000"
+                style="@style/input_username_style"/>
+        </LinearLayout>
+
+        <!-- 分割线 -->
+        <include layout="@layout/app_separator"/>
+
+        <!-- 手机号 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dip"
+            android:padding="5dip"
+            android:paddingBottom="5dip">
+            <EditText
+                android:id="@+id/app_register_phone_et"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1000"
+                style="@style/input_phone_style"/>
+        </LinearLayout>
+
+        <!-- 分割线 -->
+        <include layout="@layout/app_separator"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dip"
+            android:padding="5dip"
+            android:paddingBottom="5dip">
+            <EditText
+                android:id="@+id/app_register_password_et"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1000"
+                style="@style/input_password_style"/>
+            <!-- 	        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/show_password_icon"
+                            android:layout_gravity="center_vertical"/> -->
+        </LinearLayout>
+
+        <!-- 分割线 -->
+        <include layout="@layout/app_separator"/>
+
+        <!-- 验证码 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:padding="5dip"
+            android:paddingBottom="5dip">
+            <EditText
+                android:id="@+id/app_register_validatecode_et"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1000"
+                style="@style/input_validatecode_style"/>
+            <TextView
+                android:id="@+id/app_register_validatecode_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取验证码"
+                android:textSize="12sp"
+                android:background="@drawable/app_get_validate_code_bg"
+                android:textColor="@color/white"
+                android:clickable="true"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 完成按钮 -->
+    <Button
+        android:id="@+id/app_finish_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/button_style"
+        android:text="完成"
+        android:layout_marginTop="20dip"/>
+
+    <!-- 提示 -->
+    <TextView
+        android:id="@+id/app_register_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/tip_style"
+        android:layout_marginTop="10dip"/>
+
+</LinearLayout>

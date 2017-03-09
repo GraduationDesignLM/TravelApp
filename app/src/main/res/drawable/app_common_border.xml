@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+	公共边框样式
+
+ -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <corners
+        android:radius="1dip"/>
+    <stroke
+        android:width="@dimen/app_common_border_strokeWidth"
+        android:color="@color/gray"/>
+    <padding
+        android:left="@dimen/app_common_border_padding"
+        android:top="@dimen/app_common_border_padding"
+        android:right="@dimen/app_common_border_padding"
+        android:bottom="@dimen/app_common_border_padding"/>
+    <solid
+        android:color="@color/white"/>
+</shape>
