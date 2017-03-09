@@ -17,4 +17,9 @@
     <!--lyw-->
     <!--publish modular-->
     <dimen name="publish_main_activity_snpl_layout_margin">10dp</dimen>
+    <dimen name="publish_main_activity_edittext_left_margin">30dp</dimen>
+    <dimen name="publish_main_activity_parent_layout_margin">30dp</dimen>
+    <dimen name="publish_main_activity_item_margin_top">30dp</dimen>
+    <dimen name="publish_main_activity_edittext_textsize">21sp</dimen>
+    <dimen name="publish_main_activity_textview_textsize">21sp</dimen>
 </resources>

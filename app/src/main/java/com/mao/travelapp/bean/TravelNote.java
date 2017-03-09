@@ -1,5 +1,6 @@
 package com.mao.travelapp.bean;
 
+import com.j256.ormlite.field.DatabaseField;
 import com.mao.travelapp.sdk.BaseObject;
 
 import java.util.List;
@@ -9,14 +10,19 @@ import java.util.List;
  */
 
 public class TravelNote extends BaseObject {
+
+    @DatabaseField(generatedId = true)
     private int id;
+    @DatabaseField
     private String text;
-    private List<String> pictureUrl;
+    @DatabaseField
+    private String pictureUrls;
+    @DatabaseField
     private String location;
+    @DatabaseField
     private int userId;
+    @DatabaseField
     private String publish_time;
-    private String locationLongitude;
-    private String locationLatitude;
 
     public int getId() {
         return id;
@@ -32,22 +38,6 @@ public class TravelNote extends BaseObject {
 
     public void setPublish_time(String publish_time) {
         this.publish_time = publish_time;
-    }
-
-    public String getLocationLongitude() {
-        return locationLongitude;
-    }
-
-    public void setLocationLongitude(String locationLongitude) {
-        this.locationLongitude = locationLongitude;
-    }
-
-    public String getLocationLatitude() {
-        return locationLatitude;
-    }
-
-    public void setLocationLatitude(String locationLatitude) {
-        this.locationLatitude = locationLatitude;
     }
 
     public int getUserId() {
@@ -66,12 +56,12 @@ public class TravelNote extends BaseObject {
         this.text = text;
     }
 
-    public List<String> getPictureUrl() {
-        return pictureUrl;
+    public String getPictureUrl() {
+        return pictureUrls;
     }
 
-    public void setPictureUrl(List<String> pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrls = pictureUrls;
     }
 
     public String getLocation() {

@@ -1,16 +1,23 @@
 package com.mao.travelapp.bean;
 
+import com.j256.ormlite.field.DatabaseField;
 import com.mao.travelapp.sdk.BaseObject;
 
 /**
  * Created by lyw on 2017/2/20.
  */
 
-public class PersonalInformation extends BaseObject{
+public class PersonalInformation extends BaseObject {
+
+    @DatabaseField(generatedId = true)
     private int id;
+    @DatabaseField
     private String introduction;
+    @DatabaseField
     private String gender;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String headUrl;
 
     public int getId() {

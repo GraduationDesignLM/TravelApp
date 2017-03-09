@@ -50,7 +50,13 @@ public class TimeUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
 		return sdf.format(timestamp2Date(timestamp));
 	}
-	
+
+	/**
+	 * 发布时间间隔
+	 *
+	 * @param timestamp 要转换的时间戳
+	 * @return
+     */
 	public static String timestamp2DesriptionString(long timestamp) {
 		long time = System.currentTimeMillis();
 		
