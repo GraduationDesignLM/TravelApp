@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -46,10 +47,12 @@ public abstract class BaseObject {
             CommonDBCallback callback = null;
             QueryCallback queryCallback = null;
             String message = null;
+            Log.v("Base","11111");
             switch (msg.what) {
                 case COMMONDBCALLBACK_SUCCESS_MSG:
                     callback = (CommonDBCallback) msg.obj;
                     String affectedRowCount = DataHoler.commonDBCallbackMap.get(callback);
+                    Log.v("Base",affectedRowCount);
                     callback.onSuccess(Integer.valueOf(affectedRowCount));
                     break;
                 case COMMONDBCALLBACK_FAIL_MSG:

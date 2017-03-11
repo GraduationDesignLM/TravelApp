@@ -56,11 +56,11 @@ public class TravelNote extends BaseObject {
         this.text = text;
     }
 
-    public String getPictureUrl() {
+    public String getPictureUrls() {
         return pictureUrls;
     }
 
-    public void setPictureUrl(String pictureUrl) {
+    public void setPictureUrls(String pictureUrls) {
         this.pictureUrls = pictureUrls;
     }
 

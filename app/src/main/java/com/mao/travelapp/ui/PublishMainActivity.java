@@ -277,7 +277,7 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
                     pictureUrls.append(s);
                     pictureUrls.append("&");
                 }
-                travelNote.setPictureUrl(pictureUrls.toString());
+                travelNote.setPictureUrls(pictureUrls.toString());
                 travelNote.save(new CommonDBCallback() {
                     @Override
                     public void onSuccess(int affectedRowCount) {
