@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,9 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.badoo.mobile.util.WeakHandler;
 import com.baidu.location.BDLocation;
 import com.mao.travelapp.R;
+import com.mao.travelapp.bean.AddressBean;
 import com.mao.travelapp.bean.TravelNote;
 import com.mao.travelapp.sdk.CommonDBCallback;
 import com.mao.travelapp.sdk.FileHelper;
@@ -48,18 +50,28 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
     private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
     private static final int REQUEST_CODE_PHOTO_PREVIEW = 2;
 
+    private boolean isAutomaticLocation = false;
+    //
+    private double longitude, latitude;
     MaterialEditText et_publish_main_content;
     TextView tv_publish_main_location;
     TextView tv_publish_main_time;
     ImageView iv_publish_main_time;
     BGASortableNinePhotoLayout snpl_publish_main_picture;
     BottomDialog dialog;
+
     private static final String TAG = "PublishMainActivity";
 
-    WeakHandler weakHandler;
     ImageView iv_publish_main_location_icon;
     ProgressDialog progressDialog;
     StringBuilder pictureUrls;
+    TravelNote travelNote;
+    Handler locationHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +86,13 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
     void receiveLocation(BDLocation location) {
         Log.v("address", location.getAddrStr());
         tv_publish_main_location.setText(location.getAddrStr());
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        isAutomaticLocation = true;
     }
 
     private void initView() {
         pictureUrls = new StringBuilder();
-        weakHandler = new WeakHandler();
         iv_publish_main_location_icon = (ImageView) findViewById(R.id.iv_publish_main_location_icon);
         et_publish_main_content = (MaterialEditText) findViewById(R.id.et_publish_main_content);
         tv_publish_main_location = (TextView) findViewById(R.id.tv_publish_main_location);
@@ -109,11 +123,33 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
-            TravelNote travelNote = new TravelNote();
+            travelNote = new TravelNote();
             travelNote.setText(et_publish_main_content.getText().toString());
             travelNote.setLocation(tv_publish_main_location.getText().toString());
             travelNote.setPublish_time(tv_publish_main_time.getText().toString());
-            responseUploadFile(snpl_publish_main_picture.getData(), travelNote);
+            if (isAutomaticLocation) {
+                travelNote.setLatitude(latitude);
+                travelNote.setLongitude(longitude);
+                responseUploadFile(snpl_publish_main_picture.getData(), travelNote);
+            } else {
+                getLatitudeAndLongitudeByAddress(tv_publish_main_location.getText().toString(), new GetLatitudeAndLongitudeCallBack() {
+                    @Override
+                    public void handleData(AddressBean addressBean) {
+                        if ((addressBean == null) || (addressBean.getStatus() != 0)) {
+                            Toast.makeText(PublishMainActivity.this, "无法获取地方的经纬度", Toast.LENGTH_SHORT).show();
+                        } else {
+                            travelNote.setLatitude(addressBean.getResult().getLocation().getLat());
+                            travelNote.setLongitude(addressBean.getResult().getLocation().getLng());
+                            PublishMainActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    responseUploadFile(snpl_publish_main_picture.getData(), travelNote);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
         return false;
     }
@@ -250,11 +286,12 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
                             location += street.name;
                         }
                         final String string = location;
-                        weakHandler.post(new Runnable() {
+                        locationHandler.post(new Runnable() {
                             @Override
                             public void run() {
                                 dialog.dismiss();
                                 tv_publish_main_location.setText(string);
+                                isAutomaticLocation = false;
                             }
                         });
                     }
@@ -281,13 +318,13 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
                 travelNote.save(new CommonDBCallback() {
                     @Override
                     public void onSuccess(int affectedRowCount) {
-                        Log.v(TAG, "success");
+                        Toast.makeText(PublishMainActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
 
                     @Override
                     public void onFail(String error) {
-                        Log.v(TAG, "failed");
+                        Toast.makeText(PublishMainActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 });
@@ -295,9 +332,18 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
 
             @Override
             public void onFail(String error) {
-
+                Log.v(TAG,error);
+                Toast.makeText(PublishMainActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }

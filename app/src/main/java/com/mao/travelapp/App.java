@@ -10,6 +10,9 @@ import com.mao.imageloader.core.ImageLoaderConfiguration;
  */
 public class App extends Application {
 
+    public static final String Baidu_AK = "wghVwKkcuFXcmbIxOkOPzBvZoMwljPlE";
+    public static final String SHA1_PACKAGE = "F6:D2:5E:73:A0:2E:66:EA:C5:7D:82:F8:99:BF:69:6C:91:7D:C1:55;com.mao.travelapp";
+
     @Override
     public void onCreate() {
         super.onCreate();
