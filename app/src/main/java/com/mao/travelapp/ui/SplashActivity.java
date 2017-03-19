@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.mao.travelapp.R;
 import com.mao.travelapp.bean.User;
+import com.mao.travelapp.manager.Loginer;
 import com.mao.travelapp.manager.SpManager;
 import com.mao.travelapp.manager.UserManager;
 import com.mao.travelapp.sdk.BaseObject;
@@ -53,51 +54,26 @@ public class SplashActivity extends BaseActivity {
             finish();
 
         }
-        //是否可以进行自动登录
-        SharedPreferences sp = getSharedPreferences(SpManager.USER_SP_NAME, MODE_PRIVATE);
 
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(SpManager.USERNAME_KEY, "安琪拉");
-        editor.putString(SpManager.PASSWORD_KEY, "123456");
-        editor.commit();
 
-        final User rawUser = new User();
-        rawUser.setUsername(sp.getString(SpManager.USERNAME_KEY, null));
-        rawUser.setPassword(sp.getString(SpManager.PASSWORD_KEY, null));
-        Map<String, String> where = new HashMap<String, String>();
-        where.put("username", rawUser.getUsername());
-        where.put("password", rawUser.getPassword());
-        BaseObject.query(where, User.class, new QueryCallback<User>() {
+        final User rawUser = SpManager.getUser(this);
 
+        Loginer.login(rawUser, new Loginer.OnLoginListener() {
             @Override
-            public void onSuccess(List<User> list) {
-                System.out.println(111);
-                if (list != null && list.size() > 0) {
-                    User user = list.get(0);
-                    //再次检验
-                    if (user != null
-                            && !TextUtils.isEmpty(user.getUsername())
-                            && !TextUtils.isEmpty(user.getPassword())) {
-                        if (user.getUsername().equals(rawUser.getUsername())
-                                && user.getPassword().equals(rawUser.getPassword())) {
-                            //登录成功
-                            UserManager.setInstance(user);
-                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            return;
-                        }
-                    }
-                }
-                handleForUnLoagin();
+            public void onSuccess(User user) {
+                UserManager.setInstance(user);
+                SpManager.saveUser(SplashActivity.this, user);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override
             public void onFail(String error) {
-                System.out.println(error);
                 handleForUnLoagin();
             }
         });
+
     }
 
     private void initView() {
@@ -109,7 +85,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //跳转到登录页面
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                startActivityForResult(new Intent(SplashActivity.this, LoginActivity.class), 1);
             }
         });
 
@@ -117,7 +93,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //跳转到注册页面
-                startActivity(new Intent(SplashActivity.this, RegisterActivity.class));
+                startActivityForResult(new Intent(SplashActivity.this, RegisterActivity.class), 1);
             }
         });
 

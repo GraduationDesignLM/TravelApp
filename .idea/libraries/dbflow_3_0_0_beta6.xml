@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="dbflow-3.0.0-beta6">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.android/build-cache/2ec20fb67a4278abc3cebf6821065e1b9b4ef255/output/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/2ec20fb67a4278abc3cebf6821065e1b9b4ef255/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/2ec20fb67a4278abc3cebf6821065e1b9b4ef255/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.Raizlabs.DBFlow/dbflow/3.0.0-beta6/63da571b44374f1bfd8c75f9008447b335bafccb/dbflow-3.0.0-beta6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

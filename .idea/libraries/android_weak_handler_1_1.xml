@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="android-weak-handler-1.1">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.android/build-cache/c3533d170a7733a9dafbd148243f113076e34678/output/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/c3533d170a7733a9dafbd148243f113076e34678/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/c3533d170a7733a9dafbd148243f113076e34678/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

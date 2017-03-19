@@ -7,9 +7,10 @@ class HttpManager {
 
     final static int port = 8080;
     //final static String BASE_URL = "http://115.28.78.48:" + port + "/";
-    //final static String BASE_URL = "http://10.0.0.2:" + port + "/";
+   // final static String BASE_URL = "http://10.0.0.2:" + port + "/";
 //    final static String BASE_URL = "http://192.168.191.1:" + port + "/";
-    final static String BASE_URL = "http://10.242.7.115:" + port + "/";
+    //final static String BASE_URL = "http://10.242.7.115:" + port + "/";
+    final static String BASE_URL = "http://10.242.10.144:" + port + "/";
     final static String DB_SERVLET_URL = "TravelServer/servlet/CommonDBServlet";
 
     /** 上传一个文件URL后缀 */
