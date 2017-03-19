@@ -22,12 +22,24 @@ public class SpManager {
     public static final String PHONE_KEY = "phone";
 
     public static void saveUser(Context context, User user) {
-        if(context == null || user == null) {
+        if(context == null) {
             return;
+        }
+        if(user == null) {
+            user = null;
         }
         String username = user.getUsername();
         String password = user.getPassword();
         String phone = user.getPhone();
+        if(username == null) {
+            username = "";
+        }
+        if(password == null) {
+            password = "";
+        }
+        if(phone == null) {
+            phone = "";
+        }
 
         SharedPreferences sp = context.getSharedPreferences(SpManager.USER_SP_NAME, Context.MODE_PRIVATE);
 

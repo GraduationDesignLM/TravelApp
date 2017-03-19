@@ -161,10 +161,10 @@ public class RegisterActivity extends BaseActivity {
     private void startRegister(final String username, final String phone, final String password, String validateCode) {
 
         //测试阶段不用验证码
-        if(true) {
-            registerNewUser(username, phone, password);
-            return;
-        }
+//        if(true) {
+//            registerNewUser(username, phone, password);
+//            return;
+//        }
 
         //先验证验证码是否正确
         BmobSMS.verifySmsCode(getApplicationContext(), phone, validateCode, new VerifySMSCodeListener() {

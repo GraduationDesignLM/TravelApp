@@ -3,7 +3,6 @@ package com.mao.travelapp.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,15 +12,8 @@ import android.widget.Toast;
 import com.mao.imageloader.utils.EncryptHelper;
 import com.mao.travelapp.R;
 import com.mao.travelapp.bean.User;
-import com.mao.travelapp.manager.Loginer;
 import com.mao.travelapp.manager.SpManager;
 import com.mao.travelapp.manager.UserManager;
-import com.mao.travelapp.sdk.BaseObject;
-import com.mao.travelapp.sdk.QueryCallback;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mao on 2017/3/5.
@@ -124,7 +116,7 @@ public class LoginActivity extends BaseActivity {
 
     private void login(User user) {
         //处理登录逻辑
-        Loginer.login(user, new Loginer.OnLoginListener() {
+        UserManager.login(user, new UserManager.OnLoginListener() {
             @Override
             public void onSuccess(User user) {
                 UserManager.setInstance(user);

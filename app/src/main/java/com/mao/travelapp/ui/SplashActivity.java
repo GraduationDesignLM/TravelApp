@@ -1,28 +1,15 @@
 package com.mao.travelapp.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SyncStatusObserver;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
+import com.mao.travelapp.App;
 import com.mao.travelapp.R;
 import com.mao.travelapp.bean.User;
-import com.mao.travelapp.manager.Loginer;
 import com.mao.travelapp.manager.SpManager;
 import com.mao.travelapp.manager.UserManager;
-import com.mao.travelapp.sdk.BaseObject;
-import com.mao.travelapp.sdk.QueryCallback;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 启动页
@@ -55,10 +42,14 @@ public class SplashActivity extends BaseActivity {
 
         }
 
+        //不进行自动登录，开发调试使用，发布时必须把AUTO_LOGIN设置为true
+        if(!App.AUTO_LOGIN) {
+            handleForUnLoagin();
+            return;
+        }
 
         final User rawUser = SpManager.getUser(this);
-
-        Loginer.login(rawUser, new Loginer.OnLoginListener() {
+        UserManager.login(rawUser, new UserManager.OnLoginListener() {
             @Override
             public void onSuccess(User user) {
                 UserManager.setInstance(user);

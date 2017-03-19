@@ -21,6 +21,8 @@
     <!-- 编辑框公共样式 -->
     <style name="input_style">
         <item name="android:background">@drawable/app_common_et_bg</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">#cccccc</item>
         <item name="android:textSize">16sp</item>
     </style>
     <!-- 输入用户名EditText样式 -->
