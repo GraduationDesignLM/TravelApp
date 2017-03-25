@@ -3,13 +3,14 @@ package com.mao.travelapp.bean;
 import com.j256.ormlite.field.DatabaseField;
 import com.mao.travelapp.sdk.BaseObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lyw on 2017/2/20.
  */
 
-public class TravelNote extends BaseObject {
+public class TravelNote extends BaseObject implements Serializable {
 
     @DatabaseField(generatedId = true)
     private int id;

@@ -51,6 +51,7 @@
         <activity android:name=".ui.PublishMainActivity" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.DetailActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

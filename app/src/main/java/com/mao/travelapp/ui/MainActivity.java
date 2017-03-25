@@ -24,6 +24,7 @@ import com.mao.travelapp.bean.User;
 import com.mao.travelapp.manager.UserManager;
 import com.mao.travelapp.sdk.BaseObject;
 import com.mao.travelapp.sdk.QueryCallback;
+import com.mao.travelapp.utils.MethodCompat;
 import com.mao.travelapp.utils.UnitsUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -147,10 +148,10 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(MainPageViewHolder holder, int position) {
-            TravelNote item = mData.get(position);
+            final TravelNote item = mData.get(position);
             String str = item.getPictureUrls();
             //先清除缓存，设置为默认图片
-            holder.iv.setImageDrawable(getDrawable(R.drawable.background_white));
+            holder.iv.setImageDrawable(MethodCompat.getDrawable(MainActivity.this, R.drawable.background_white));
             if(!TextUtils.isEmpty(str)) {
                 String[] arr = str.split("##");
                 if (arr != null && arr.length > 0) {
@@ -158,6 +159,15 @@ public class MainActivity extends BaseActivity {
                 }
             }
             holder.tv.setText(item.getText());
+            //设置点击事件
+            holder.item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                    intent.putExtra("item", item);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -168,11 +178,13 @@ public class MainActivity extends BaseActivity {
 
     private static class MainPageViewHolder extends RecyclerView.ViewHolder {
 
+        private View item;
         private ImageView iv;
         private TextView tv;
 
         public MainPageViewHolder(View itemView) {
             super(itemView);
+            item = itemView.findViewById(R.id.item);
             iv = (ImageView) itemView.findViewById(R.id.iv);
             tv = (TextView) itemView.findViewById(R.id.tv);
         }
