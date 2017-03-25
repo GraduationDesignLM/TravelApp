@@ -28,6 +28,21 @@ public class TravelNote extends BaseObject {
     @DatabaseField
     private double longitude;
 
+    public TravelNote(){}
+
+    public TravelNote(String text, String pictureUrls,
+                      String location, int userId,
+                      String publish_time, double latitude,
+                      double longitude) {
+        this.text = text;
+        this.pictureUrls = pictureUrls;
+        this.location = location;
+        this.userId = userId;
+        this.publish_time = publish_time;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public double getLatitude() {
         return latitude;
     }

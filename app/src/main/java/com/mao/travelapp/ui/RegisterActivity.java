@@ -1,5 +1,6 @@
 package com.mao.travelapp.ui;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mao.travelapp.App;
 import com.mao.travelapp.R;
+import com.mao.travelapp.bean.User;
+import com.mao.travelapp.manager.SpManager;
+import com.mao.travelapp.manager.UserManager;
 
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.exception.BmobException;
@@ -101,7 +106,7 @@ public class RegisterActivity extends BaseActivity {
             setRegisterError("请输入手机号码");
         } else if(TextUtils.isEmpty(password)) {
             setRegisterError("请输入密码");
-        } else if(TextUtils.isEmpty(validateCode)) {
+        } else if(!App.DEBUG && TextUtils.isEmpty(validateCode)) {
             setRegisterError("请输入验证码");
         } else {
             startRegister(username, phone, password, validateCode);
@@ -161,10 +166,10 @@ public class RegisterActivity extends BaseActivity {
     private void startRegister(final String username, final String phone, final String password, String validateCode) {
 
         //测试阶段不用验证码
-//        if(true) {
-//            registerNewUser(username, phone, password);
-//            return;
-//        }
+        if(App.DEBUG) {
+            registerNewUser(username, phone, password);
+            return;
+        }
 
         //先验证验证码是否正确
         BmobSMS.verifySmsCode(getApplicationContext(), phone, validateCode, new VerifySMSCodeListener() {
@@ -183,7 +188,24 @@ public class RegisterActivity extends BaseActivity {
     //注册新用户
     private void registerNewUser(final String username, final String phone, final String password) {
         //处理注册逻辑
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setPhone(phone);
+        UserManager.register(user, new UserManager.OnRegisterListener() {
+            @Override
+            public void onSuccess(User user) {
+                UserManager.setInstance(user);
+                SpManager.saveUser(RegisterActivity.this, user);
+                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                finish();
+            }
 
+            @Override
+            public void onFail(String error) {
+                Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

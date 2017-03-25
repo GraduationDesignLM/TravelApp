@@ -47,4 +47,5 @@ dependencies {
     compile 'com.badoo.mobile:android-weak-handler:1.1'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile files('libs/BmobSDK_V3.4.4_0930.jar')
+    compile files('libs/universal-image-loader-1.9.4.jar')
 }

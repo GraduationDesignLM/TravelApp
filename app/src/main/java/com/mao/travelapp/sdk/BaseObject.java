@@ -1,5 +1,6 @@
 package com.mao.travelapp.sdk;
 
+import android.content.SyncStatusObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -47,7 +48,6 @@ public abstract class BaseObject {
             CommonDBCallback callback = null;
             QueryCallback queryCallback = null;
             String message = null;
-            Log.v("Base","11111");
             switch (msg.what) {
                 case COMMONDBCALLBACK_SUCCESS_MSG:
                     callback = (CommonDBCallback) msg.obj;
@@ -168,7 +168,12 @@ public abstract class BaseObject {
                 sb.append(fields[i].getName());
                 sb.append("\":\"");
                 fields[i].setAccessible(true);
-                sb.append(fields[i].get(this).toString());
+                Object obj = fields[i].get(this);
+                if(obj != null) {
+                    sb.append(obj.toString());
+                } else {
+                    sb.append("");
+                }
                 sb.append("\"");
             }
             sb.append("}");
@@ -193,6 +198,7 @@ public abstract class BaseObject {
             sb.append("\":\"");
             sb.append(e.getValue());
             sb.append("\"");
+            System.out.println(sb.toString());
         }
         sb.append("}");
         return sb.toString();

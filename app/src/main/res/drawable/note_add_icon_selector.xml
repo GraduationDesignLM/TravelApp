@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+	添加笔记图标selector
+
+	@author mao
+ -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:state_pressed="true"
+        android:drawable="@drawable/note_add_icon_sel"/>
+	<item 
+	    android:drawable="@drawable/note_add_icon_nor"/>
+</selector>

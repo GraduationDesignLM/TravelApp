@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.mao.travelapp.bean.User;
 import com.mao.travelapp.sdk.BaseObject;
+import com.mao.travelapp.sdk.CommonDBCallback;
 import com.mao.travelapp.sdk.QueryCallback;
 
 import java.util.HashMap;
@@ -33,6 +34,12 @@ public class UserManager {
 
 
     public static void login(User user, final OnLoginListener listener) {
+        if(user == null) {
+            if(listener != null) {
+                listener.onFail("参数错误");
+            }
+            return;
+        }
         Map<String, String> where = new HashMap<String, String>();
         String username = user.getUsername();
         String phone = user.getPhone();
@@ -89,6 +96,63 @@ public class UserManager {
         return false;
     }
 
+
+    public static void register(final User user, final OnRegisterListener listener) {
+        if(user == null) {
+            if(listener != null) {
+                listener.onFail("参数错误");
+            }
+            return;
+        }
+        //简单起见，先不管
+//        Map<String, String> where = new HashMap<String, String>();
+//        String username = user.getUsername();
+//        String phone = user.getPhone();
+//        String password = user.getPassword();
+//        if(!TextUtils.isEmpty(username)) {
+//            where.put("username", username);
+//        }
+//        if(!TextUtils.isEmpty(phone)) {
+//            where.put("phone", phone);
+//        }
+//        if(!TextUtils.isEmpty(password)) {
+//            where.put("password", password);
+//        }
+//        BaseObject.query(where, User.class, new QueryCallback<User>() {
+//            @Override
+//            public void onSuccess(List<User> list) {
+//
+//            }
+//
+//            @Override
+//            public void onFail(String error) {
+//
+//            }
+//        }
+        user.save(new CommonDBCallback() {
+            @Override
+            public void onSuccess(int affectedRowCount) {
+                if(affectedRowCount == 1 && listener != null) {
+                    listener.onSuccess(user);
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+                if(listener != null) {
+                    listener.onFail(error);
+                }
+            }
+        });
+
+    }
+
+    public interface OnRegisterListener {
+
+        void onSuccess(User user);
+
+        void onFail(String error);
+    }
 
     public interface OnLoginListener {
 

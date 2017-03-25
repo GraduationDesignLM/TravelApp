@@ -100,6 +100,7 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
         iv_publish_main_time = (ImageView) findViewById(R.id.iv_publish_main_time);
         snpl_publish_main_picture = (BGASortableNinePhotoLayout) findViewById(R.id.snpl_publish_main_picture);
         snpl_publish_main_picture.setDelegate(this);
+        progressDialog = new ProgressDialog(this);
         initEvent();
     }
 
@@ -117,7 +118,6 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
 
     private boolean setTravelNote() {
         if (isNoteComplete()) {
-            progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("上传文件");
             progressDialog.setTitle("wait......");
             progressDialog.setIndeterminate(true);
@@ -312,7 +312,7 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
             public void onSuccess(List<String> urls) {
                 for (String s : urls) {
                     pictureUrls.append(s);
-                    pictureUrls.append("&");
+                    pictureUrls.append("##");
                 }
                 travelNote.setPictureUrls(pictureUrls.toString());
                 travelNote.save(new CommonDBCallback() {
