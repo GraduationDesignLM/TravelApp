@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <!-- 头像 -->
+    <ImageView
+        android:id="@+id/headpicture"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <!-- 用户名 -->
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/headpicture"
+        android:layout_alignTop="@id/headpicture"
+        android:textColor="#000"/>
+
+    <!-- 日期 -->
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/headpicture"
+        android:layout_alignBottom="@id/headpicture"
+        android:textColor="#000"/>
+
+    <!-- 内容 -->
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/date"
+        android:layout_below="@id/date"
+        android:textColor="#000"/>
+
+</RelativeLayout>

@@ -281,7 +281,6 @@ public abstract class BaseObject {
             @Override
             public void onFailure(Call call, IOException e) {
                 if(callback != null) {
-                    //callback.onFail(e.getMessage());
                     Message msg = Message.obtain();
                     msg.what = QUERYCALLBACK_FAIL_MSG;
                     msg.obj = callback;
@@ -305,7 +304,6 @@ public abstract class BaseObject {
                     for(JsonElement e : arr) {
                         list.add(gson.fromJson(e, clazz));
                     }
-                    //callback.onSuccess(list);
                     Message msg = Message.obtain();
                     msg.what = QUERYBCALLBACK_SUCCESS_MSG;
                     msg.obj = callback;
