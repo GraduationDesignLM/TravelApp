@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity {
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this, PersonalityActivity.class));
             }
         });
         //刷新按钮

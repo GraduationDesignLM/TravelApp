@@ -8,6 +8,7 @@
     <string name="register">注册</string>
     <string name="forget_password">忘记密码？</string>
     <string name="phone">手机号码</string>
+    <string name="username_phone">用户名或手机号码</string>
 
 
     <!--lyw-->

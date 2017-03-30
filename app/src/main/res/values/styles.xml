@@ -38,6 +38,13 @@
         <item name="android:singleLine">true</item>
         <item name="android:maxLength">15</item>
     </style>
+
+    <style name="input_username_phone_style" parent="@style/input_style">
+        <item name="android:hint">@string/username_phone</item>
+        <item name="android:inputType">phone</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLength">15</item>
+    </style>
     <!-- 输入密码EditText样式 -->
     <style name="input_password_style" parent="@style/input_style">
         <item name="android:hint">@string/password</item>

@@ -37,11 +37,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1000"
-                android:hint="请输入用户名或手机号"
-                android:singleLine="true"
-                android:maxLength="15"
-                android:background="@drawable/app_common_et_bg"
-                android:textSize="16sp"/>
+                style="@style/input_username_phone_style"/>
         </LinearLayout>
 
         <!-- 分割线 -->

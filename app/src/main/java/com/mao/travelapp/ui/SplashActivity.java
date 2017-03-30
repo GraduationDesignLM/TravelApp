@@ -1,8 +1,10 @@
 package com.mao.travelapp.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 import com.mao.travelapp.App;
@@ -16,7 +18,7 @@ import com.mao.travelapp.manager.UserManager;
  *
  * Created by mao on 2017/2/25.
  */
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends Activity {
 
     private static final int REGISTER_REQUEST_CODE = 1;
     private static final int LOGIN_REQUEST_CODE = 2;
@@ -27,6 +29,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
