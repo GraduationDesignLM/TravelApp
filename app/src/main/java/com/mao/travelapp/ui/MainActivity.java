@@ -1,7 +1,16 @@
 package com.mao.travelapp.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
@@ -25,8 +34,11 @@ import com.mao.travelapp.manager.UserManager;
 import com.mao.travelapp.sdk.BaseObject;
 import com.mao.travelapp.sdk.QueryCallback;
 import com.mao.travelapp.utils.MethodCompat;
+import com.mao.travelapp.utils.TimeUtils;
 import com.mao.travelapp.utils.UnitsUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,8 +87,8 @@ public class MainActivity extends BaseActivity {
         TextView tv = setActionBarLeftText("");
         ViewGroup.LayoutParams params = tv.getLayoutParams();
         if(params != null) {
-            params.height = UnitsUtils.dp2px(this, 40);
-            params.width = UnitsUtils.dp2px(this, 40);
+            params.height = UnitsUtils.dp2px(this, 30);
+            params.width = UnitsUtils.dp2px(this, 30);
         }
         tv.setBackgroundResource(R.drawable.user_default_head_circle);
         tv.setOnClickListener(new View.OnClickListener() {
@@ -90,8 +102,8 @@ public class MainActivity extends BaseActivity {
         mFlusView.setBackgroundResource(R.drawable.flush);
         params = mFlusView.getLayoutParams();
         if(params != null) {
-            params.height = UnitsUtils.dp2px(this, 40);
-            params.width = UnitsUtils.dp2px(this, 40);
+            params.height = UnitsUtils.dp2px(this, 30);
+            params.width = UnitsUtils.dp2px(this, 30);
         }
         mFlusView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +159,7 @@ public class MainActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(MainPageViewHolder holder, int position) {
+        public void onBindViewHolder(final MainPageViewHolder holder, int position) {
             final TravelNote item = mData.get(position);
             String str = item.getPictureUrls();
             //先清除缓存，设置为默认图片
@@ -159,6 +171,27 @@ public class MainActivity extends BaseActivity {
                 }
             }
             holder.tv.setText(item.getText());
+            holder.date.setText(item.getPublish_time());
+            holder.location.setText(item.getLocation());
+
+            Map<String, String> where = new HashMap<String, String>();
+            where.put("id", item.getUserId() + "");
+            BaseObject.query(where, User.class, new QueryCallback<User>() {
+                @Override
+                public void onSuccess(List<User> list) {
+                    if(list != null && list.size() > 0) {
+                        User user = list.get(0);
+                        ImageLoader.getInstance().displayImage(user.getPicture(), holder.headpicture);
+                        holder.username.setText(user.getUsername());
+                    }
+                }
+
+                @Override
+                public void onFail(String error) {
+
+                }
+            });
+
             //设置点击事件
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -181,12 +214,20 @@ public class MainActivity extends BaseActivity {
         private View item;
         private ImageView iv;
         private TextView tv;
+        private ImageView headpicture;
+        private TextView username;
+        private TextView date;
+        private TextView location;
 
         public MainPageViewHolder(View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.item);
             iv = (ImageView) itemView.findViewById(R.id.iv);
             tv = (TextView) itemView.findViewById(R.id.tv);
+            headpicture = (ImageView) itemView.findViewById(R.id.headpicture);
+            username = (TextView) itemView.findViewById(R.id.username);
+            date = (TextView) itemView.findViewById(R.id.date);
+            location = (TextView) itemView.findViewById(R.id.location);
         }
     }
 

@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="#ffffff"
-    android:focusable="false"
-    android:clickable="false">
+    android:background="#ffffff">
 
     <TextView
         android:id="@+id/keyTv"
@@ -14,9 +12,7 @@
         android:layout_alignParentLeft="true"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_centerVertical="true"
-        android:focusable="false"
-        android:clickable="false"/>
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/valueTv"
@@ -25,17 +21,14 @@
         android:layout_alignParentRight="true"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_centerVertical="true"
-        android:focusable="false"
-        android:clickable="false"/>
+        android:layout_centerVertical="true" />
 
-    <ImageView
+    <com.mao.travelapp.view.CircleImageView
         android:id="@+id/valueIv"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:focusable="false"
-        android:clickable="false"/>
+        android:src="@drawable/user_default_head_circle"/>
 
 </RelativeLayout>

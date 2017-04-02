@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mao.travelapp.R;
+import com.mao.travelapp.utils.UnitsUtils;
 
 
 public abstract class BaseActivity extends Activity {
@@ -54,7 +55,11 @@ public abstract class BaseActivity extends Activity {
         super.setContentView(mContentViewWrapper, params);
 
         //新的ActionBar实现
-        mActionBarView = LayoutInflater.from(this).inflate(R.layout.app_common_actionbar, null);
+        mActionBarView = LayoutInflater.from(this).inflate(R.layout.app_common_actionbar, mContentViewWrapper, false);
+        ViewGroup.LayoutParams layoutParams = mActionBarView.getLayoutParams();
+        if(layoutParams != null) {
+            layoutParams.height = UnitsUtils.dp2px(this, 55.0f);
+        }
         mContentViewWrapper.addView(mActionBarView);
 
         if(getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {

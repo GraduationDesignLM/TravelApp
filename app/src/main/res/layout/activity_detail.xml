@@ -32,16 +32,16 @@
                     android:id="@+id/desciption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textColor="#000"
                     android:layout_marginBottom="10dp"/>
                 <!-- 头像 -->
-                <ImageView
+                <com.mao.travelapp.view.CircleImageView
                     android:id="@+id/headpicture"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_below="@id/desciption"
-                    android:src="@drawable/avatar_default"
+                    android:src="@drawable/user_default_head_circle"
                     android:layout_marginRight="10dp"
                     android:scaleType="centerCrop"/>
                 <!-- 用户名 -->
@@ -54,14 +54,24 @@
                     android:textSize="16sp"
                     android:textColor="#000"/>
                 <!-- 发布地点 -->
+                <ImageView
+                    android:id="@+id/location_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:textColor="@color/black"
+                    android:src="@drawable/location_icon"
+                    android:layout_below="@id/headpicture"
+                    android:layout_marginTop="10dp"/>
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/location_icon"
                     android:layout_below="@id/headpicture"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textColor="#000"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="3dp"/>
 
             </RelativeLayout>
 
@@ -71,21 +81,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="10dp">
-                <include
-                    layout="@layout/app_separator"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="评论"
-                    android:layout_margin="15dp"
-                    android:textSize="18sp"
+                    android:layout_margin="10dp"
+                    android:textSize="16sp"
                     android:textColor="#000"/>
                 <include
                     layout="@layout/app_separator"/>
                 <com.mao.travelapp.view.NestedListView
                     android:id="@+id/listView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:dividerHeight="1dp"
+                    android:divider="#ccc"/>
             </LinearLayout>
 
             <!--占位布局 -->
@@ -103,21 +113,43 @@
     <!--底部评论布局 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:focusableInTouchMode="true">
 
-        <EditText
-            android:id="@+id/comment_et"
+        <include
+            layout="@layout/app_separator"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1000"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/comment_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发表"/>
+            <EditText
+                android:id="@+id/comment_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1000"
+                android:layout_marginRight="10dp"
+                android:hint="请输入评论内容"
+                android:textColorHint="#ccc"
+                android:textColor="#000"
+                android:background="@drawable/comment_edit"/>
+
+            <Button
+                android:id="@+id/comment_send"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="发表"
+                style="@style/button_style"
+                android:textSize="14sp"/>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
