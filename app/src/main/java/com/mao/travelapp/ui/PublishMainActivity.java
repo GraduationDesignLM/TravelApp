@@ -20,6 +20,7 @@ import com.baidu.location.BDLocation;
 import com.mao.travelapp.R;
 import com.mao.travelapp.bean.AddressBean;
 import com.mao.travelapp.bean.TravelNote;
+import com.mao.travelapp.manager.UserManager;
 import com.mao.travelapp.sdk.CommonDBCallback;
 import com.mao.travelapp.sdk.FileHelper;
 import com.mao.travelapp.sdk.UploadFileCallback;
@@ -124,6 +125,7 @@ public class PublishMainActivity extends LocationBaseActivity implements EasyPer
             progressDialog.setCancelable(false);
             progressDialog.show();
             travelNote = new TravelNote();
+            travelNote.setUserId(UserManager.getInstance().getId());
             travelNote.setText(et_publish_main_content.getText().toString());
             travelNote.setLocation(tv_publish_main_location.getText().toString());
             travelNote.setPublish_time(tv_publish_main_time.getText().toString());
