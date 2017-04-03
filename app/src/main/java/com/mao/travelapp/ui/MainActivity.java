@@ -351,7 +351,7 @@ public class MainActivity extends BaseActivity {
     private void flushDataIfNeed() {
         //先看缓存
         if(CacheCenter.sHeadPictureCache != null) {
-            MethodCompat.setBackground(setActionBarCenterText(""), new BitmapDrawable(getResources(), CacheCenter.sHeadPictureCache));
+            MethodCompat.setBackground(setActionBarLeftText(""), new BitmapDrawable(getResources(), CacheCenter.sHeadPictureCache));
         }
         Map<String, String> where = new HashMap<String, String>();
         where.put("username", UserManager.getInstance().getUsername());
