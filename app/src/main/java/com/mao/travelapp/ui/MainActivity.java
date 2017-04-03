@@ -3,11 +3,14 @@ package com.mao.travelapp.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,16 +33,23 @@ import com.mao.travelapp.App;
 import com.mao.travelapp.R;
 import com.mao.travelapp.bean.TravelNote;
 import com.mao.travelapp.bean.User;
+import com.mao.travelapp.manager.CacheCenter;
 import com.mao.travelapp.manager.UserManager;
 import com.mao.travelapp.sdk.BaseObject;
+import com.mao.travelapp.sdk.CommonDBCallback;
 import com.mao.travelapp.sdk.QueryCallback;
+import com.mao.travelapp.utils.BitmapUtils;
 import com.mao.travelapp.utils.MethodCompat;
 import com.mao.travelapp.utils.TimeUtils;
 import com.mao.travelapp.utils.UnitsUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,12 +82,18 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initData();
         //第一次进来自动获取数据
         getData();
 
         initView();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        flushDataIfNeed();
     }
 
     private void initView() {
@@ -127,6 +143,9 @@ public class MainActivity extends BaseActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
                 View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount()-1);
+                if(lastChildView == null) {
+                    return;
+                }
                 int lastChildBottom = lastChildView.getBottom();
                 int recyclerBottom =  recyclerView.getBottom()-recyclerView.getPaddingBottom();
                 int lastPosition  = recyclerView.getLayoutManager().getPosition(lastChildView);
@@ -167,7 +186,11 @@ public class MainActivity extends BaseActivity {
             if(!TextUtils.isEmpty(str)) {
                 String[] arr = str.split("##");
                 if (arr != null && arr.length > 0) {
-                    ImageLoader.getInstance().displayImage(arr[0], holder.iv);
+                    DisplayImageOptions opt = new DisplayImageOptions.Builder()
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true)
+                            .build();
+                    ImageLoader.getInstance().displayImage(arr[0], holder.iv, opt);
                 }
             }
             holder.tv.setText(item.getText());
@@ -315,54 +338,73 @@ public class MainActivity extends BaseActivity {
     }
 
     public void rotateAnim(View view) {
-        if(view == null) {
+        if (view == null) {
             return;
         }
-        Animation anim =new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        Animation anim = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setFillAfter(true); // 设置保持动画最后的状态
         anim.setDuration(500); // 设置动画时间
         view.startAnimation(anim);
     }
 
-    private void initData() {
-        if(false && App.DEBUG) {
-            //使用模拟数据
-            mData.clear();
-            mData.add(new TravelNote(
-                    "测试数据",
-                    "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
-                    "广州市",
-                    1,
-                    "3-24 14:17",
-                    23,
-                    115));
-            mData.add(new TravelNote(
-                    "测试数据",
-                    "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
-                    "广州市",
-                    1,
-                    "3-24 14:17",
-                    23,
-                    115));
-            mData.add(new TravelNote(
-                    "测试数据",
-                    "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
-                    "广州市",
-                    1,
-                    "3-24 14:17",
-                    23,
-                    115));
-
-            for(int i = 0; i < 100; i++) {
-                mData.add(new TravelNote(
-                    "测试数据",
-                    "http://www.33lc.com/article/UploadPic/2012-8/201282413335761587.jpg",
-                    "广州市",
-                    1,
-                    "3-24 14:17",
-                    23,
-                    115));
-            }
+    //刷新该刷新的东西，如头像等
+    private void flushDataIfNeed() {
+        //先看缓存
+        if(CacheCenter.sHeadPictureCache != null) {
+            MethodCompat.setBackground(setActionBarCenterText(""), new BitmapDrawable(getResources(), CacheCenter.sHeadPictureCache));
         }
+        Map<String, String> where = new HashMap<String, String>();
+        where.put("username", UserManager.getInstance().getUsername());
+        BaseObject.query(where, User.class, new QueryCallback<User>() {
+            @Override
+            public void onSuccess(List<User> list) {
+                if(list != null && list.size() > 0) {
+                    User user = list.get(0);
+                    String url = user.getPicture();
+                    if(!TextUtils.isEmpty(url) && !url.equals(UserManager.getInstance().getPicture())) {
+                        UserManager.getInstance().setPicture(url);
+                        loadHeadPicture(setActionBarLeftText(""), url);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+
+            }
+        });
     }
+
+    private void loadHeadPicture(final TextView tv, String url) {
+        if(tv == null || TextUtils.isEmpty(url)) {
+            return;
+        }
+        ImageLoader.getInstance().displayImage(url, new ImageView(MainActivity.this), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                if(bitmap != null) {
+                    CacheCenter.sHeadPictureCache = bitmap;
+                    bitmap = BitmapUtils.createCircleBitmap(bitmap);
+                    MethodCompat.setBackground(setActionBarCenterText(""), new BitmapDrawable(getResources(), bitmap));
+                }
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+        });
+    }
+
+
 }

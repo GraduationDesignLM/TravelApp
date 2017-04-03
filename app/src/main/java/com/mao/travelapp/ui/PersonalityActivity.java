@@ -27,6 +27,7 @@ import com.mao.travelapp.manager.UserManager;
 import com.mao.travelapp.sdk.CommonDBCallback;
 import com.mao.travelapp.sdk.FileHelper;
 import com.mao.travelapp.sdk.UploadFileCallback;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -129,7 +130,11 @@ public class PersonalityActivity extends BaseActivity {
                 valueIv.setVisibility(View.VISIBLE);
                 valueTv.setVisibility(View.GONE);
                 if(!TextUtils.isEmpty(item.value)) {
-                    ImageLoader.getInstance().displayImage(item.value, valueIv);
+                    DisplayImageOptions opt = new DisplayImageOptions.Builder()
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true)
+                            .build();
+                    ImageLoader.getInstance().displayImage(item.value, valueIv, opt);
                 } else {
                     valueIv.setImageDrawable(getDrawable(R.drawable.user_default_head_circle));
                 }

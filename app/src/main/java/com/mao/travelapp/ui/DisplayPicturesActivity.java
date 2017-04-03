@@ -83,7 +83,7 @@ public class DisplayPicturesActivity extends BaseActivity implements OnPageChang
 			mWrapLayouts[i] = new RelativeLayout(this);
 			mWrapLayouts[i].setBackgroundColor(Color.parseColor("#000000"));
 			mImageViews[i] = new ImageView(this);
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			params.addRule(RelativeLayout.CENTER_IN_PARENT);
 			mImageViews[i].setLayoutParams(params);
 

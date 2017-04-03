@@ -32,6 +32,7 @@ import com.mao.travelapp.utils.StringUtils;
 import com.mao.travelapp.utils.UnitsUtils;
 import com.mao.travelapp.view.CircleImageView;
 import com.mao.travelapp.view.WrapContentViewPager;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.w3c.dom.Text;
@@ -209,7 +210,11 @@ public class DetailActivity extends BaseActivity {
                 views[i].setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ViewGroup.LayoutParams params = new ViewPager.LayoutParams();
                 views[i].setLayoutParams(params);
-                ImageLoader.getInstance().displayImage(mPicUrls[i], views[i]);
+                DisplayImageOptions opt = new DisplayImageOptions.Builder()
+                        .cacheInMemory(true)
+                        .cacheOnDisk(true)
+                        .build();
+                ImageLoader.getInstance().displayImage(mPicUrls[i], views[i], opt);
             }
         }
 
@@ -299,6 +304,10 @@ public class DetailActivity extends BaseActivity {
                 public void onSuccess(List<User> list) {
                     if(list != null && list.size() > 0) {
                         User user = list.get(0);
+                        DisplayImageOptions opt = new DisplayImageOptions.Builder()
+                                .cacheInMemory(true)
+                                .cacheOnDisk(true)
+                                .build();
                         ImageLoader.getInstance().displayImage(user.getPicture(), h.headpicture);
                     }
                 }
